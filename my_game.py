@@ -19,15 +19,21 @@ class Game:
 	def run_game(self):
 		"""Start the main loop for the game."""
 		while True:
-			#checking for input
-			for event in pygame.event.get():
+			self._check_event()
+			self._draw_screen()
+				
+
+	def _check_event(self):
+		"""Checking for input"""
+		for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					sys.exit()
-			#draw screen with background
-			self.screen.fill(self.settings.bg_color)
-			self.villain.blitme()
-			#Redraw every cycle
-			pygame.display.flip()
+
+	def _draw_screen(self):
+		"""Drawing screen every cycle."""
+		self.screen.fill(self.settings.bg_color)
+		self.villain.blitme()
+		pygame.display.flip()
 
 if __name__ == "__main__":
 	#Create instance and run game.
