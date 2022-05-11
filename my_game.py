@@ -22,7 +22,6 @@ class Game:
 			self._check_event()
 			self._draw_screen()
 				
-
 	def _check_event(self):
 		"""Checking for input"""
 		for event in pygame.event.get():
