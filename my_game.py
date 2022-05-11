@@ -1,8 +1,9 @@
 import sys
 import pygame
 from settings import Settings
+from character import Squid
 
-class Game():
+class Game:
 	"""Main class for running the game."""
 	def __init__(self):
 		"""Initializing the game and create game ressources."""
@@ -13,6 +14,7 @@ class Game():
 					self.settings.screen_height
 					))
 		pygame.display.set_caption("This is awesome!")
+		self.villain = Squid(self)
 
 	def run_game(self):
 		"""Start the main loop for the game."""
@@ -23,6 +25,7 @@ class Game():
 					sys.exit()
 			#draw screen with background
 			self.screen.fill(self.settings.bg_color)
+			self.villain.blitme()
 			#Redraw every cycle
 			pygame.display.flip()
 
