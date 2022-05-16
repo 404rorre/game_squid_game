@@ -47,18 +47,23 @@ class Game:
 			#Move object to the right.
 			if event.key == pygame.K_RIGHT:
 				self.villain.right = True
+				print("right")
 			#Move object to the left.
 			if event.key == pygame.K_LEFT:
 				self.villain.left = True
+				print("left")
 			#Move the object up.
 			if event.key == pygame.K_UP:
 				self.villain.up = True
+				print("up")
 			#Move the object down.
 			if event.key == pygame.K_DOWN:
 				self.villain.down = True
+				print("down")
 			#Close the game.
 			if event.key == pygame.K_q:
 				self.exit_game = True
+				print("q")
 
 	def _check_key_up_events(self, event):
 		"""Checking for KEYUP-Events"""
