@@ -27,7 +27,7 @@ class Squid(Sprite):
 
 	def update(self):
 		"""Updates squid position."""
-		self.y += int(self.settings.squid_speed_y 
+		self.y += int(self.speed_y_unique
 					* self.settings.squid_direction)
 		self.rect.y = self.y
 

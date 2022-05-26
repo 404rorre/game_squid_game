@@ -17,6 +17,6 @@ class Settings():
 		#squid settings
 		self.squid_speed_x = 10
 		self.squid_speed_y = 1
-		self.squid_border = 100
+		self.squid_border = 300
 		self.squid_direction = 1
 

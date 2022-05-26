@@ -14,17 +14,20 @@ class Game:
 		"""Initializing the game and create game ressources."""
 		pygame.init()
 		self.settings = Settings()
-		self.screen = pygame.display.set_mode((
-					self.settings.screen_width,
-					self.settings.screen_height
-					))
+		self.screen = pygame.display.set_mode(
+			(0,0),
+			pygame.FULLSCREEN
+
+			)
 		self.screen_rect = self.screen.get_rect()
+		self.settings.screen_width = self.screen_rect.width
+		self.settings.screen_height = self.screen_rect.height
 		pygame.display.set_caption("This is awesome!")
 		#Initialize game variables
 		self.soldier = Soldier(self)
 		self.bullets = pygame.sprite.Group()
 		self.squids = pygame.sprite.Group()
-		self._create_x_squids(5)
+		self._create_x_squids(100)
 		#Flags
 		self.exit_game = False
 
@@ -34,6 +37,7 @@ class Game:
 			self._check_event()
 			self.soldier.update()
 			self._bullet_update()
+			self.squids.update()
 			self._draw_screen()
 				
 	def _check_event(self):
@@ -146,7 +150,7 @@ class Game:
 		squid.y = rng_y 
 		squid.rect.y = squid.y
 		#set unique movement
-		rng_speed = uniform(1, 1.5)
+		rng_speed = uniform(1, 2.5)
 		squid.speed_y_unique = self.settings.squid_speed_y * rng_speed
 		#first storage for unique border
 		squid.rect_old = squid.rect
