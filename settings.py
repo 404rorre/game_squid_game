@@ -13,5 +13,10 @@ class Settings():
 		self.bullet_width = 15
 		self.bullet_speed = 1.0
 		self.bullet_color = (255, 255, 255)
-		self.bullet_limit = 2
+		self.bullet_limit = 3
+		#squid settings
+		self.squid_speed_x = 10
+		self.squid_speed_y = 1
+		self.squid_border = 100
+		self.squid_direction = 1
 

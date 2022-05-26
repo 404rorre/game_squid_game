@@ -1,8 +1,12 @@
 import sys
 import pygame
+from pygame.sprite import Sprite
+from random import uniform
+from random import randint
 from settings import Settings
-from character import Squid
+from character import Soldier
 from bullet import Bullet
+from squid import Squid
 
 class Game:
 	"""Main class for running the game."""
@@ -16,8 +20,11 @@ class Game:
 					))
 		self.screen_rect = self.screen.get_rect()
 		pygame.display.set_caption("This is awesome!")
-		self.villain = Squid(self)
+		#Initialize game variables
+		self.soldier = Soldier(self)
 		self.bullets = pygame.sprite.Group()
+		self.squids = pygame.sprite.Group()
+		self._create_x_squids(5)
 		#Flags
 		self.exit_game = False
 
@@ -25,7 +32,7 @@ class Game:
 		"""Start the main loop for the game."""
 		while True:
 			self._check_event()
-			self.villain.update()
+			self.soldier.update()
 			self._bullet_update()
 			self._draw_screen()
 				
@@ -47,19 +54,19 @@ class Game:
 		if event.type == pygame.KEYDOWN:
 			#Move object to the right.
 			if event.key == pygame.K_RIGHT:
-				self.villain.right = True
+				self.soldier.right = True
 				print("right")
 			#Move object to the left.
 			if event.key == pygame.K_LEFT:
-				self.villain.left = True
+				self.soldier.left = True
 				print("left")
 			#Move the object up.
 			if event.key == pygame.K_UP:
-				self.villain.up = True
+				self.soldier.up = True
 				print("up")
 			#Move the object down.
 			if event.key == pygame.K_DOWN:
-				self.villain.down = True
+				self.soldier.down = True
 				print("down")
 			#Close the game.
 			if event.key == pygame.K_q:
@@ -75,16 +82,16 @@ class Game:
 		if event.type == pygame.KEYUP:
 			#Move object to the right.
 			if event.key == pygame.K_RIGHT:
-				self.villain.right = False
+				self.soldier.right = False
 			#Move object to the left.
 			if event.key == pygame.K_LEFT:
-				self.villain.left = False
+				self.soldier.left = False
 			#Move the object up.
 			if event.key == pygame.K_UP:
-				self.villain.up = False
+				self.soldier.up = False
 			#Move the object down.
 			if event.key == pygame.K_DOWN:
-				self.villain.down = False
+				self.soldier.down = False
 
 	def _fire_bullet(self):
 		"""Firing one bullet."""
@@ -95,7 +102,6 @@ class Game:
 			#Creating slow bullets because overheated
 			bullet_new = Bullet(self, 0.3)	
 		self.bullets.add(bullet_new)
-
 
 	def _bullet_update(self):
 		"""Update bullet Position and remove when off screen."""
@@ -109,8 +115,9 @@ class Game:
 	def _draw_screen(self):
 		"""Drawing screen every cycle."""
 		self.screen.fill(self.settings.bg_color)
-		self.villain.blitme()
+		self.soldier.blitme()
 		self._bullet_draw()
+		self.squids.draw(self.screen)
 		pygame.display.flip()
 
 	def _bullet_draw(self):
@@ -118,6 +125,32 @@ class Game:
 		#go through sprite.Group and draw each bullet
 		for bullet in self.bullets:
 			bullet.draw()
+
+	def _create_x_squids(self, nr_squid):
+		"""Function to add multiple squids on the field."""
+		for nr in range(nr_squid):
+			self._create_one_squid()
+
+	def _create_one_squid(self):
+		"""Simple function to add only one squid on the screen."""
+		squid = Squid(self)
+		squid_width, squid_height = squid.rect.size
+		#random position generator for squids to shoot down
+		rng_x = randint(self.soldier.rect.width + 3 * squid_width,
+						self.settings.screen_width - squid_width)
+		rng_y = randint(squid_height, 
+						self.settings.screen_height - squid_height)
+		#set squid position
+		squid.x = rng_x
+		squid.rect.x = rng_x
+		squid.y = rng_y 
+		squid.rect.y = squid.y
+		#set unique movement
+		rng_speed = uniform(1, 1.5)
+		squid.speed_y_unique = self.settings.squid_speed_y * rng_speed
+		#first storage for unique border
+		squid.rect_old = squid.rect
+		self.squids.add(squid)
 
 if __name__ == "__main__":
 	#Create instance and run game.

@@ -1,7 +1,7 @@
 import pygame
 from settings import Settings
 
-class Squid:
+class Soldier:
 	"""Intitialize villain character of SquidGame."""
 	def __init__(self, game):
 		"""Initialize game character."""
