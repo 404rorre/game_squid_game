@@ -13,7 +13,7 @@ class Soldier:
 		self.image = pygame.image.load("images/squid_game.bmp")
 		self.rect = self.image.get_rect()
 		#Start the game character at the midleft of the screen
-		self.rect.midbottom = self.screen_rect.midbottom
+		self.rect.midleft = self.screen_rect.midleft
 		#Movement flag
 		self.right = False
 		self.left = False

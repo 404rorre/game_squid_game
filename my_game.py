@@ -27,7 +27,7 @@ class Game:
 		self.soldier = Soldier(self)
 		self.bullets = pygame.sprite.Group()
 		self.squids = pygame.sprite.Group()
-		self._create_x_squids(100)
+		self._create_x_squids(5)
 		#Flags
 		self.exit_game = False
 
@@ -37,7 +37,7 @@ class Game:
 			self._check_event()
 			self.soldier.update()
 			self._bullet_update()
-			self.squids.update()
+			self._squids_update()
 			self._draw_screen()
 				
 	def _check_event(self):
@@ -150,11 +150,34 @@ class Game:
 		squid.y = rng_y 
 		squid.rect.y = squid.y
 		#set unique movement
-		rng_speed = uniform(1, 2.5)
+		rng_speed = uniform(1, 2.3)
 		squid.speed_y_unique = self.settings.squid_speed_y * rng_speed
 		#first storage for unique border
-		squid.rect_old = squid.rect
+		squid.border_unique = self.settings.squid_border
+		squid.rect_old_y = squid.rect.y
 		self.squids.add(squid)
+
+	def _squids_update(self):
+		"""Updates squid position."""
+
+		self.squids.update()
+		self._squids_check_edge()
+
+	def _squids_check_edge(self):
+		"""
+		Checkes in one squid touches edge and changes y movement.
+		Full function inside the loop.
+		"""
+		for squid in self.squids.sprites():
+			if squid.check_edge_y():
+				squid.direction_unique *= -1
+				squid.x -= self.settings.squid_speed_x
+				squid.rect.x = squid.x
+				squid.rect_old = squid.rect
+				print("changed")
+				print(squid.direction_unique, " ", squid.rect_old.y, " ", squid.rect.y)
+				
+
 
 if __name__ == "__main__":
 	#Create instance and run game.

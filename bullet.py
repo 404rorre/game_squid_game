@@ -16,7 +16,7 @@ class Bullet(Sprite):
 		#Create a bullet at (0, 0) and set the correct position
 		self.rect = pygame.Rect(0, 0, self.settings.bullet_width, 
 					self.settings.bullet_height)
-		self.rect.midright = game.villain.rect.midright
+		self.rect.midright = game.soldier.rect.midright
 		#create y coordinate of self.rect with float
 		self.x = float(self.rect.x)
 

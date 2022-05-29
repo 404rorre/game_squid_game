@@ -1,4 +1,5 @@
 import pygame
+import random
 from pygame.sprite import Sprite
 
 class Squid(Sprite):
@@ -18,22 +19,32 @@ class Squid(Sprite):
 		self.image = pygame.image.load("images/squid.bmp")
 		self.rect = self.image.get_rect()
 		#position storage
-		self.rect_old = None
+		self.rect_old_y = None
 		#Initialize movement variables
 		self.x = int(self.rect.x)
 		self.y = int(self.rect.y)
-		#Unique movement speed
+		#Unique movement attributes
 		self.speed_y_unique= 0
+		self.border_unique =0
+		self.direction_unique = 1
 
 	def update(self):
 		"""Updates squid position."""
 		self.y += int(self.speed_y_unique
-					* self.settings.squid_direction)
+					* self.direction_unique)
 		self.rect.y = self.y
 
-	def check_edges(self):
+	def check_edge_y(self):
 		"""Checks for individual border to change direction."""
-		if (self.rect_old >= (self.rect_old + self.settings.squid_border) or
-			self.rect_old <= (self.rect_old - self.settings.squid_border)):
+		rng_border = random.uniform(1, 2)
+		print(self.rect_old_y , " ", self.rect.y)
+		if (self.rect_old_y >= (self.rect.y + self.settings.squid_border) or
+			self.rect_old_y <= (self.rect.y - self.settings.squid_border)or 
+			self.rect.top <= self.screen_rect.top or 
+			self.rect.bottom >= self.screen_rect.bottom):
+
+			self.rect_old_y = self.rect.y 
+			self.border_unique *= rng_border
 			return True
+			
 

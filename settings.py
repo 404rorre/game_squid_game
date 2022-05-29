@@ -7,7 +7,7 @@ class Settings():
 		self.screen_height = 800
 		self.bg_color = (0, 0, 0)
 		#ship settings
-		self.obj_speed = 1.5
+		self.obj_speed = 2
 		#bullet settings
 		self.bullet_height = 3
 		self.bullet_width = 15
@@ -15,8 +15,8 @@ class Settings():
 		self.bullet_color = (255, 255, 255)
 		self.bullet_limit = 3
 		#squid settings
-		self.squid_speed_x = 10
+		self.squid_speed_x = 30
 		self.squid_speed_y = 1
-		self.squid_border = 300
+		self.squid_border = 200
 		self.squid_direction = 1
 
