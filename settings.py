@@ -6,8 +6,9 @@ class Settings():
 		self.screen_width = 1200
 		self.screen_height = 800
 		self.bg_color = (0, 0, 0)
-		#ship settings
+		#object settings
 		self.obj_speed = 2
+		self.soldier_limit = 3
 		#bullet settings
 		self.bullet_height = 3
 		self.bullet_width = 15

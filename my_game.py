@@ -1,9 +1,11 @@
 import sys
 import pygame
 from pygame.sprite import Sprite
+from time import sleep
 from random import uniform
 from random import randint
 from settings import Settings
+from game_stats import GameStats
 from character import Soldier
 from bullet import Bullet
 from squid import Squid
@@ -23,6 +25,8 @@ class Game:
 		self.settings.screen_width = self.screen_rect.width
 		self.settings.screen_height = self.screen_rect.height
 		pygame.display.set_caption("This is awesome!")
+		#Initialize game statistics
+		self.stat = GameStats(self)
 		#Initialize game variables
 		self.soldier = Soldier(self)
 		self.bullets = pygame.sprite.Group()
@@ -35,9 +39,13 @@ class Game:
 		"""Start the main loop for the game."""
 		while True:
 			self._check_event()
-			self.soldier.update()
-			self._bullet_update()
-			self._squids_update()
+
+			#Run game only if flag is active.
+			if self.stat.game_active:
+				self.soldier.update()
+				self._bullet_update()
+				self._squids_update()
+
 			self._draw_screen()
 				
 	def _check_event(self):
@@ -118,7 +126,6 @@ class Game:
 		#Check bullet-squid collision.
 		self._check_bullet_squid_collision()
 
-
 	def _draw_screen(self):
 		"""Drawing screen every cycle."""
 		self.screen.fill(self.settings.bg_color)
@@ -173,9 +180,37 @@ class Game:
 
 	def _squids_update(self):
 		"""Updates squid position."""
-
 		self.squids.update()
 		self._squids_check_edge()
+		#Check for alien and screen collision.
+		self._check_squid_collide_soldier()
+		self._check_squid_collide_left_screen()
+
+	def _check_squid_collide_soldier(self):
+		"""
+		Function to determin soldiers left by checking the collision with squids.
+		"""
+		if pygame.sprite.spritecollideany(self.soldier, self.squids):
+			self._soldier_hit()	
+
+	def _check_squid_collide_left_screen(self):
+		"""Checks if the squid hits left screen."""
+		for squid in self.squids.sprites():
+			if squid.rect.x <= 0:
+				self._soldier_hit()		
+
+	def _soldier_hit(self):
+		"""Resets game for the next life."""
+		self.stat.soldiers_left -= 1
+		if self.stat.soldiers_left > 0:
+				#Decrement lifes and reset game.				
+				self.squids.empty()
+				self.bullets.empty()
+				self.soldier.reset_soldier()
+				self._create_x_squids(5)
+		else:
+			#Deactivate game and freeze.
+			self.stat.game_active = False
 
 	def _squids_check_edge(self):
 		"""
@@ -187,8 +222,7 @@ class Game:
 				squid.direction_unique *= -1
 				squid.x -= self.settings.squid_speed_x
 				squid.rect.x = squid.x
-				squid.rect_old = squid.rect			
-
+				squid.rect_old = squid.rect	
 
 if __name__ == "__main__":
 	#Create instance and run game.
