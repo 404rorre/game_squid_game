@@ -36,14 +36,14 @@ class Squid(Sprite):
 
 	def check_edge_y(self):
 		"""Checks for individual border to change direction."""
-		rng_border = random.uniform(1, 2)
-		print(self.rect_old_y , " ", self.rect.y)
 		if (self.rect_old_y >= (self.rect.y + self.settings.squid_border) or
 			self.rect_old_y <= (self.rect.y - self.settings.squid_border)or 
 			self.rect.top <= self.screen_rect.top or 
 			self.rect.bottom >= self.screen_rect.bottom):
-
+			#store y-position to compare later
 			self.rect_old_y = self.rect.y 
+			#change border for random pattern
+			rng_border = random.uniform(1, 3)
 			self.border_unique *= rng_border
 			return True
 			

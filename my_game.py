@@ -115,6 +115,9 @@ class Game:
 		for bullet in self.bullets.copy():
 			if bullet.rect.left > self.screen_rect.right:
 				self.bullets.remove(bullet)
+		#Check bullet-squid collision.
+		self._check_bullet_squid_collision()
+
 
 	def _draw_screen(self):
 		"""Drawing screen every cycle."""
@@ -129,6 +132,17 @@ class Game:
 		#go through sprite.Group and draw each bullet
 		for bullet in self.bullets:
 			bullet.draw()
+
+	def _check_bullet_squid_collision(self):
+		"""Checks bullet-squid collision."""
+		#Remove any bullets and squids that collided.
+		collisions = pygame.sprite.groupcollide(self.bullets, 
+												self.squids, 
+												True, True)
+		if not self.squids:
+			#Destroy any remaining bullet.
+			self.bullets.empty()
+			self._create_x_squids(5)
 
 	def _create_x_squids(self, nr_squid):
 		"""Function to add multiple squids on the field."""
@@ -173,10 +187,7 @@ class Game:
 				squid.direction_unique *= -1
 				squid.x -= self.settings.squid_speed_x
 				squid.rect.x = squid.x
-				squid.rect_old = squid.rect
-				print("changed")
-				print(squid.direction_unique, " ", squid.rect_old.y, " ", squid.rect.y)
-				
+				squid.rect_old = squid.rect			
 
 
 if __name__ == "__main__":
