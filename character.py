@@ -53,5 +53,5 @@ class Soldier:
 		"""Resets Soldier to start position."""
 		self.rect.midleft = self.screen_rect.midleft
 		
-		self.rect.x = self.x 
-		self.rect.y = self.y
+		self.x = self.rect.x
+		self.y = self.rect.y
