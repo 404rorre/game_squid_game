@@ -1,1 +1,1 @@
-# _pygame_trymyself
+# _game_squid_game
