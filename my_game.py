@@ -9,6 +9,7 @@ from game_stats import GameStats
 from character import Soldier
 from bullet import Bullet
 from squid import Squid
+from scoreboard import Scoreboard
 
 class Game:
 	"""Main class for running the game."""
@@ -26,7 +27,8 @@ class Game:
 		self.settings.screen_height = self.screen_rect.height
 		pygame.display.set_caption("This is awesome!")
 		#Initialize game statistics
-		self.stat = GameStats(self)
+		self.stats = GameStats(self)
+		self.sb = Scoreboard(self)
 		#Initialize game variables
 		self.soldier = Soldier(self)
 		self.bullets = pygame.sprite.Group()
@@ -41,7 +43,7 @@ class Game:
 			self._check_event()
 
 			#Run game only if flag is active.
-			if self.stat.game_active:
+			if self.stats.game_active:
 				self.soldier.update()
 				self._bullet_update()
 				self._squids_update()
@@ -129,6 +131,7 @@ class Game:
 	def _draw_screen(self):
 		"""Drawing screen every cycle."""
 		self.screen.fill(self.settings.bg_color)
+		self.sb.show_score()
 		self.soldier.blitme()
 		self._bullet_draw()
 		self.squids.draw(self.screen)
@@ -201,8 +204,8 @@ class Game:
 
 	def _soldier_hit(self):
 		"""Resets game for the next life."""
-		self.stat.soldiers_left -= 1
-		if self.stat.soldiers_left > 0:
+		self.stats.soldiers_left -= 1
+		if self.stats.soldiers_left > 0:
 				#Decrement lifes and reset game.				
 				self.squids.empty()
 				self.bullets.empty()

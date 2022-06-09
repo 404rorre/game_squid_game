@@ -1,10 +1,14 @@
 import pygame
+from pygame.sprite import Sprite
 from settings import Settings
 
-class Soldier:
+class Soldier(Sprite):
 	"""Intitialize villain character of SquidGame."""
 	def __init__(self, game):
 		"""Initialize game character."""
+		#Init super parent class
+		super().__init__()
+		#Init game screen
 		self.screen = game.screen
 		self.screen_rect = self.screen.get_rect()
 		#Initialize settings
