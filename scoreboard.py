@@ -78,8 +78,8 @@ class Scoreboard:
 
 	def check_high_score(self):
 		"""Checks if the player reached a bigger high score."""
-		if self.stats.score > self.stats.high_score:
-			self.high_score = self.stats.score
+		if self.stats.high_score < self.stats.score:
+			self.stats.high_score = self.stats.score
 			self.prep_hs_score()
 
 	def show_score(self):

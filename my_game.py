@@ -69,27 +69,27 @@ class Game:
 			#Move object to the right.
 			if event.key == pygame.K_RIGHT:
 				self.soldier.right = True
-				print("right")
+				#print("right")
 			#Move object to the left.
 			if event.key == pygame.K_LEFT:
 				self.soldier.left = True
-				print("left")
+				#print("left")
 			#Move the object up.
 			if event.key == pygame.K_UP:
 				self.soldier.up = True
-				print("up")
+				#print("up")
 			#Move the object down.
 			if event.key == pygame.K_DOWN:
 				self.soldier.down = True
-				print("down")
+				#print("down")
 			#Close the game.
 			if event.key == pygame.K_q:
 				self.exit_game = True
-				print("q")
+				#print("q")
 			#Shooting bullet
 			if event.key == pygame.K_SPACE:
 				self._fire_bullet()
-				print("Space")
+				#print("Space")
 
 	def _check_key_up_events(self, event):
 		"""Checking for KEYUP-Events"""
@@ -149,9 +149,19 @@ class Game:
 		collisions = pygame.sprite.groupcollide(self.bullets, 
 												self.squids, 
 												True, True)
+		if collisions:
+			for squids in collisions.values():
+				self.stats.score += self.settings.squid_points * len(squids)
+			self.sb.prep_score()
+			self.sb.check_high_score()
+			print(self.stats.high_score, " ", self.stats.score)
+
 		if not self.squids:
 			#Destroy any remaining bullet.
 			self.bullets.empty()
+			self.settings.increase_lvl()
+			self.stats.level += 1
+			self.sb.prep_lvl()
 			self._create_x_squids(5)
 
 	def _create_x_squids(self, nr_squid):
@@ -205,6 +215,7 @@ class Game:
 	def _soldier_hit(self):
 		"""Resets game for the next life."""
 		self.stats.soldiers_left -= 1
+		self.sb.prep_soldiers_left()
 		if self.stats.soldiers_left > 0:
 				#Decrement lifes and reset game.				
 				self.squids.empty()
@@ -213,7 +224,7 @@ class Game:
 				self._create_x_squids(5)
 		else:
 			#Deactivate game and freeze.
-			self.stat.game_active = False
+			self.stats.game_active = False
 
 	def _squids_check_edge(self):
 		"""

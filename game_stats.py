@@ -18,3 +18,4 @@ class GameStats:
 		#Start the game in an active state.
 		self.game_active = True
 
+	
