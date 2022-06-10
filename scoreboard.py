@@ -79,6 +79,7 @@ class Scoreboard:
 		if self.stats.high_score < self.stats.score:
 			self.stats.high_score = self.stats.score
 			self.prep_hs_score()
+			print(self.stats.high_score)
 
 	def show_score(self):
 		"""Draws Scoreboard on screen."""

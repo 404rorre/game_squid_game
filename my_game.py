@@ -5,7 +5,9 @@ from time import sleep
 from random import uniform
 from random import randint
 from settings import Settings
+from save import Save
 from game_stats import GameStats
+from button import Button
 from character import Soldier
 from bullet import Bullet
 from squid import Squid
@@ -29,16 +31,19 @@ class Game:
 		#Initialize game statistics
 		self.stats = GameStats(self)
 		self.sb = Scoreboard(self)
+		self.save = Save(self)
 		#Initialize game variables
 		self.soldier = Soldier(self)
 		self.bullets = pygame.sprite.Group()
 		self.squids = pygame.sprite.Group()
+		self.play_button = Button(self, "Start")
 		self._create_x_squids(5)
 		#Flags
 		self.exit_game = False
 
 	def run_game(self):
 		"""Start the main loop for the game."""
+		self.save.hs_load()
 		while True:
 			self._check_event()
 
@@ -49,6 +54,25 @@ class Game:
 				self._squids_update()
 
 			self._draw_screen()
+
+	def _start_game(self):
+		"""Initializes game after start or after game over."""
+		#Reset Stats
+		self.stats.reset_stats()
+		#Delete last game
+		self.squids.empty()
+		self.bullets.empty()
+		#Update scoreboard
+		self.sb.prep_soldiers_left()
+		self.sb.prep_lvl()
+		self.sb.prep_score()
+		#Init new game
+		self.soldier.reset_soldier()
+		self._create_x_squids(5)
+		self.stats.game_active = True
+		#Hide mouse cursor
+		pygame.mouse.set_visible(False)
+
 				
 	def _check_event(self):
 		"""Checking for input"""
@@ -56,11 +80,16 @@ class Game:
 			self._check_key_down_events(event)
 			self._check_key_up_events(event)
 			self._check_close_game(event)
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				mouse_pos = pygame.mouse.get_pos()
+				self._check_play_button(mouse_pos)
+
 
 	def _check_close_game(self, event):
 		if event.type == pygame.QUIT:
 			self.exit_game = True		
 		if self.exit_game:
+			self.save.hs_save()
 			sys.exit()
 
 	def _check_key_down_events(self, event):
@@ -86,10 +115,19 @@ class Game:
 			if event.key == pygame.K_q:
 				self.exit_game = True
 				#print("q")
+			#Starting game
+			if event.key == pygame.K_p:
+				self._start_game()
 			#Shooting bullet
 			if event.key == pygame.K_SPACE:
 				self._fire_bullet()
 				#print("Space")
+
+	def _check_play_button(self, mouse_pos):
+		"""Checks if mouse click is pointing on button."""
+		if (self.play_button.rect.collidepoint(mouse_pos) and 
+			not self.stats.game_active):
+			self._start_game()
 
 	def _check_key_up_events(self, event):
 		"""Checking for KEYUP-Events"""
@@ -131,6 +169,8 @@ class Game:
 	def _draw_screen(self):
 		"""Drawing screen every cycle."""
 		self.screen.fill(self.settings.bg_color)
+		if not self.stats.game_active:
+			self.play_button.blit_button()
 		self.sb.show_score()
 		self.soldier.blitme()
 		self._bullet_draw()

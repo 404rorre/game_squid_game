@@ -16,6 +16,6 @@ class GameStats:
 		self.level = 1
 
 		#Start the game in an active state.
-		self.game_active = True
+		self.game_active = False
 
 	
