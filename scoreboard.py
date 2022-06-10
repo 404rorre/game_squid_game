@@ -1,5 +1,5 @@
 import pygame.font
-from pygame.sprite import Sprite
+from pygame.sprite import Group
 from character import Soldier
 
 class Scoreboard:
@@ -16,9 +16,6 @@ class Scoreboard:
 		#Font settings for scoring information.
 		self.text_color = (30, 30, 30)
 		self.font = pygame.font.SysFont(None, 48)
-
-		#Init score objects
-		self.soldiers = pygame.sprite.Group()
 
 		#Prepare initial score images
 		self.prep_score()
@@ -63,6 +60,7 @@ class Scoreboard:
 
 	def prep_soldiers_left(self):
 		"""Initialize life display of game character soldier."""
+		self.soldiers = Group()
 		for soldier_nr in range(self.stats.soldiers_left):
 			soldier = Soldier(self.game)
 			soldier.rect.top = self.score_rect.top

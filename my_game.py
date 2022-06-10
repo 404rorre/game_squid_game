@@ -154,7 +154,7 @@ class Game:
 				self.stats.score += self.settings.squid_points * len(squids)
 			self.sb.prep_score()
 			self.sb.check_high_score()
-			print(self.stats.high_score, " ", self.stats.score)
+			#print(self.stats.high_score, " ", self.stats.score)
 
 		if not self.squids:
 			#Destroy any remaining bullet.
